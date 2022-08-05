@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @db.VarChar(100)
-  password String @db.VarChar(100)
-  nickname String @db.VarChar(30)
-  Tag      Tag[]
+  id           String        @id @default(uuid())
+  email        String        @unique() @db.VarChar(100)
+  password     String        @db.VarChar(100)
+  nickname     String        @db.VarChar(30)
+  Tag          Tag[]
+  RefreshToken RefreshToken?
 }
 
 model Tag {
@@ -24,4 +25,11 @@ model Tag {
   user      User   @relation(references: [id], fields: [creator])
   name      String @db.VarChar(40)
   sordOrder Int    @default(0)
+}
+
+model RefreshToken {
+  id        Int    @id @default(autoincrement())
+  userId    String @unique
+  user      User   @relation(references: [id], fields: [userId])
+  tokenHash String
 }
