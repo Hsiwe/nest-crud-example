@@ -72,7 +72,7 @@ export class AppController {
   @Post('/logout')
   async logout(@Req() req) {
     try {
-      await this.usersService.removeRefreshToken(req.user.email);
+      await this.authService.logout(req.user.email);
       return true;
     } catch (error) {
       if (error instanceof HttpException) throw error;

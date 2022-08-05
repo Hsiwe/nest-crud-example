@@ -9,7 +9,6 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      // providers: [{ provide: APP_GUARD, useExisting: ValidationPipe }],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -113,6 +112,5 @@ describe('AppController (e2e)', () => {
       .set({ Refresh: res1.body.refresh_token.token })
       .send();
     expect(res2.status).toBe(401);
-    expect(res2.body.token).toBeDefined();
   });
 });

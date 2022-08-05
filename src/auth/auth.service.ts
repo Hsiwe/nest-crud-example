@@ -44,6 +44,9 @@ export class AuthService {
       refresh_token,
     };
   }
+  async logout(email: string) {
+    await this.usersService.removeRefreshToken(email);
+  }
   getJWTRefreshToken(email: string): {
     token: string;
     expire: any;

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { IHashService } from 'src/hash.service';
 import { PrismaService } from 'src/prisma.service';
-import { RegisterDTO } from './register.dto';
+import { RegisterDTO, UpdateDTO } from './register.dto';
 
 @Injectable()
 export class UsersService {
@@ -62,5 +62,41 @@ export class UsersService {
       where: { email },
       data: { RefreshToken: { delete: true } },
     });
+  }
+  async getUserWithTags(email: string) {
+    return this.prisma.user.findFirst({
+      where: { email },
+      select: {
+        email: true,
+        nickname: true,
+        tags: { select: { id: true, name: true, sordOrder: true } },
+      },
+    });
+  }
+  async checkUpdateUniqueness(params: UpdateDTO): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            email: params.email,
+            nickname: params.nickname,
+          },
+        ],
+      },
+    });
+    return !user;
+  }
+  async updateUser(email: string, dto: UpdateDTO) {
+    let password = dto.password;
+    if (password) password = await this.hashService.hash(password);
+    const user = await this.prisma.user.findFirstOrThrow({ where: { email } });
+    const updated = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { email: dto?.email, password, nickname: dto?.nickname },
+    });
+    return { nickname: updated.nickname, email: updated.email };
+  }
+  async delete(email: string) {
+    await this.prisma.user.delete({ where: { email } });
   }
 }

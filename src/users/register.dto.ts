@@ -1,5 +1,5 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { Matches, MaxLength } from 'class-validator';
-
 export class RegisterDTO {
   @MaxLength(100)
   email: string;
@@ -11,3 +11,4 @@ export class RegisterDTO {
   @MaxLength(30)
   nickname: string;
 }
+export class UpdateDTO extends PartialType(RegisterDTO) {}

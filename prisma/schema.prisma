@@ -15,7 +15,7 @@ model User {
   email        String        @unique() @db.VarChar(100)
   password     String        @db.VarChar(100)
   nickname     String        @db.VarChar(30)
-  Tag          Tag[]
+  tags         Tag[]
   RefreshToken RefreshToken?
 }
 
