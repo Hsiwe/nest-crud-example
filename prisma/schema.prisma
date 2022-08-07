@@ -24,7 +24,7 @@ model Tag {
   creator   String
   user      User   @relation(references: [id], fields: [creator])
   name      String @db.VarChar(40)
-  sordOrder Int    @default(0)
+  sortOrder Int    @default(0)
 }
 
 model RefreshToken {

@@ -69,7 +69,7 @@ export class UsersService {
       select: {
         email: true,
         nickname: true,
-        tags: { select: { id: true, name: true, sordOrder: true } },
+        tags: { select: { id: true, name: true, sortOrder: true } },
       },
     });
   }
@@ -98,5 +98,25 @@ export class UsersService {
   }
   async delete(email: string) {
     await this.prisma.user.delete({ where: { email } });
+  }
+  async connectTags(email: string, tagIds: number[]) {
+    const tags = await this.prisma.tag.findMany({
+      where: { id: { in: tagIds } },
+      select: { id: true, name: true, sortOrder: true },
+    });
+    if (tags.length !== tagIds.length) return;
+    const user = await this.prisma.user.findFirstOrThrow({ where: { email } });
+    await this.prisma.tag.updateMany({
+      where: { id: { in: tagIds } },
+      data: { creator: { set: user.id } },
+    });
+    return tags;
+  }
+  async getMyTags(email: string) {
+    const user = await this.prisma.user.findFirstOrThrow({
+      where: { email },
+      include: { tags: { select: { id: true, name: true, sortOrder: true } } },
+    });
+    return user.tags;
   }
 }

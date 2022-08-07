@@ -13,7 +13,7 @@ CREATE TABLE "Tag" (
     "id" SERIAL NOT NULL,
     "creator" TEXT NOT NULL,
     "name" VARCHAR(40) NOT NULL,
-    "sordOrder" INTEGER NOT NULL DEFAULT 0,
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
 );

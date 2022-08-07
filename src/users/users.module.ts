@@ -6,6 +6,7 @@ import { UsersController } from './users.controller';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
+import { TagsService } from 'src/tags/tags.service';
 
 @Module({
   providers: [
@@ -17,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
     },
     AuthService,
     JwtService,
+    TagsService,
   ],
   exports: [UsersService],
   controllers: [UsersController],

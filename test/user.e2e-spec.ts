@@ -22,20 +22,10 @@ describe('UsersController (e2e)', () => {
       .send({ email: 'user email', password: 'pass123qweS', nickname: 'nick' });
     authHeader = { Authorization: `Bearer ${response.body.token}` };
   });
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe());
-    await app.init();
-  });
-
   it('/ (GET) returns authed user', () => {
     return request
       .default(app.getHttpServer())
-      .get('/users/')
+      .get('/user/')
       .set(authHeader)
       .expect(200)
       .expect((req) => {
@@ -47,7 +37,7 @@ describe('UsersController (e2e)', () => {
   it('/ (PUT) updates authed user', () => {
     return request
       .default(app.getHttpServer())
-      .put('/users/')
+      .put('/user/')
       .set(authHeader)
       .send({ nickname: 'new nick' })
       .expect(200)
@@ -60,13 +50,13 @@ describe('UsersController (e2e)', () => {
   it('/ (DELETE) deletes authed user', async () => {
     const res1 = await request
       .default(app.getHttpServer())
-      .delete('/users/')
+      .delete('/user/')
       .set(authHeader)
       .send();
     expect(res1.status).toBe(200);
     const res2 = await request
       .default(app.getHttpServer())
-      .get('/users/')
+      .get('/user/')
       .set(authHeader)
       .send();
     expect(res2.status).toBe(401);
