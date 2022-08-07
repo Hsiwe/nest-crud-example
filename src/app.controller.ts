@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
+import { LoginDTO } from './auth/dto/login.dto';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import JwtRefreshGuard from './auth/refresh.guard';
@@ -54,9 +55,9 @@ export class AppController {
   }
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(@Request() req, @Body() body: LoginDTO) {
     try {
-      const res = this.authService.login(req.body);
+      const res = this.authService.login(body);
       await this.usersService.setRefreshToken(
         req.user.email,
         res.refresh_token.token,
